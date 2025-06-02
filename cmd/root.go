@@ -3,11 +3,11 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"crudgen/generator"
 	"crudgen/generator/templates"
 
+	"github.com/iancoleman/strcase"
 	"github.com/spf13/cobra"
 )
 
@@ -41,22 +41,10 @@ var rootCmd = &cobra.Command{
 			if typ == "" {
 				break
 			}
-			fields = append(fields, templates.Field{Name: name, Type: typ})
+			fields = append(fields, templates.Field{Name: name, Type: typ, Tag: strcase.ToSnake(name)})
 		}
 		generator.Generate(moduleName, projectModulePath, fields)
 	},
-}
-
-// ToSnakeCase converts a string to snake_case format
-func ToSnakeCase(str string) string {
-	var result string
-	for i, r := range str {
-		if i > 0 && r >= 'A' && r <= 'Z' {
-			result += "_"
-		}
-		result += string(r)
-	}
-	return strings.ToLower(result)
 }
 
 func Execute() {
