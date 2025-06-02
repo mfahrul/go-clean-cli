@@ -2,27 +2,34 @@ package templates
 
 import "fmt"
 
-func DTO(module string) string {
+func DTO(module string, fields []Field) string {
+	createFields := ""
+	updateFields := ""
+	responseFields := ""
+
+	for _, f := range fields {
+		tag := ""
+		if f.Tag != "" {
+			tag = " " + f.Tag
+		}
+		createFields += fmt.Sprintf("%s %s%s\n", f.Name, f.Type, tag)
+		updateFields += fmt.Sprintf("%s %s%s\n", f.Name, f.Type, tag)
+		responseFields += fmt.Sprintf("%s %s%s\n", f.Name, f.Type, tag)
+	}
+
 	return fmt.Sprintf(`package %s
 
-import "time"
-
 type CreateDTO struct {
-	Title string `+"`json:\"title\"`"+`
-	Body  string `+"`json:\"body\"`"+`
-}
+%s}
 
 type UpdateDTO struct {
-	Title string `+"`json:\"title\"`"+`
-	Body  string `+"`json:\"body\"`"+`
-}
-	
+%s}
+
 type ResponseDTO struct {
-	ID    string  `+"`json:\"id\"`"+`
-	Title string `+"`json:\"title\"`"+`
-	Body  string `+"`json:\"body\"`"+`
-	CreatedAt *time.Time `+"`json:\"created_at,omitempty\"`"+`
-	UpdatedAt *time.Time `+"`json:\"updated_at,omitempty\"`"+`
-	DeletedAt *time.Time `+"`json:\"deleted_at,omitempty\"`"+`
-}`, module)
+%s
+CreatedAt *time.Time `+"`json:\"created_at,omitempty\"`"+`
+UpdatedAt *time.Time `+"`json:\"updated_at,omitempty\"`"+`
+DeletedAt *time.Time `+"`json:\"deleted_at,omitempty\"`"+`
+}
+`, module, createFields, updateFields, responseFields)
 }

@@ -3,8 +3,10 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"crudgen/generator"
+	"crudgen/generator/templates"
 
 	"github.com/spf13/cobra"
 )
@@ -24,8 +26,37 @@ var rootCmd = &cobra.Command{
 			fmt.Println("❌ Failed to read go.mod:", err)
 			os.Exit(1)
 		}
-		generator.Generate(moduleName, projectModulePath)
+		fields := []templates.Field{}
+		reader := os.Stdin
+		fmt.Println("Enter struct fields (name type), one per line. Leave empty to finish:")
+		for {
+			var name, typ string
+			fmt.Print("Field name: ")
+			fmt.Fscanln(reader, &name)
+			if name == "" {
+				break
+			}
+			fmt.Print("Field type: ")
+			fmt.Fscanln(reader, &typ)
+			if typ == "" {
+				break
+			}
+			fields = append(fields, templates.Field{Name: name, Type: typ})
+		}
+		generator.Generate(moduleName, projectModulePath, fields)
 	},
+}
+
+// ToSnakeCase converts a string to snake_case format
+func ToSnakeCase(str string) string {
+	var result string
+	for i, r := range str {
+		if i > 0 && r >= 'A' && r <= 'Z' {
+			result += "_"
+		}
+		result += string(r)
+	}
+	return strings.ToLower(result)
 }
 
 func Execute() {

@@ -28,7 +28,7 @@ func ReadModulePath() (string, error) {
 	return "", errors.New("module path not found in go.mod")
 }
 
-func Generate(module string, pkgPath string) {
+func Generate(module string, pkgPath string, fields []templates.Field) {
 	fmt.Printf("🚀 Generating module: %s\n", module)
 	appendRouteRegistration(module, pkgPath)
 	// Create directories
@@ -43,12 +43,12 @@ func Generate(module string, pkgPath string) {
 	}
 
 	files := map[string]string{
-		fmt.Sprintf("internal/%s/entity.go", module):                              templates.Entity(module),
-		fmt.Sprintf("internal/%s/dto.go", module):                                 templates.DTO(module),
-		fmt.Sprintf("internal/%s/repository.go", module):                          templates.Repository(module),
-		fmt.Sprintf("internal/%s/usecase.go", module):                             templates.Usecase(module),
-		fmt.Sprintf("internal/%s/usecase/%s_usecase.go", module, module):          templates.UsecaseImpl(pkgPath, module),
-		fmt.Sprintf("internal/%s/repository/postgres/%s_repo.go", module, module): templates.PostgresRepo(pkgPath, module),
+		fmt.Sprintf("internal/%s/entity.go", module):                              templates.Entity(module, fields),
+		fmt.Sprintf("internal/%s/dto.go", module):                                 templates.DTO(module, fields),
+		fmt.Sprintf("internal/%s/repository.go", module):                          templates.Repository(module, fields),
+		fmt.Sprintf("internal/%s/usecase.go", module):                             templates.Usecase(module, fields),
+		fmt.Sprintf("internal/%s/usecase/%s_usecase.go", module, module):          templates.UsecaseImpl(pkgPath, module, fields),
+		fmt.Sprintf("internal/%s/repository/postgres/%s_repo.go", module, module): templates.PostgresRepo(pkgPath, module, fields),
 		fmt.Sprintf("internal/%s/delivery/http/handler.go", module):               templates.Handler(pkgPath, module),
 		fmt.Sprintf("internal/%s/delivery/http/routes.go", module):                templates.Routes(pkgPath, module),
 		fmt.Sprintf("internal/%s/test/unit_test.go", module):                      templates.UnitTest(pkgPath, module),
