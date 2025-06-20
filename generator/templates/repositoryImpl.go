@@ -19,12 +19,13 @@ func PostgresRepo(pkgPath string, module string, fields []Field) string {
 	i := 1
 
 	for _, f := range fields {
+
 		fieldNames = append(fieldNames, strcase.ToSnake(f.Name))
 		placeholders = append(placeholders, fmt.Sprintf("$%d", i))
-		args = append(args, fmt.Sprintf("%s.%s", module, f.Name))
-		scanFields = append(scanFields, "&obj."+f.Name)
+		args = append(args, fmt.Sprintf("%s.%s", module, strcase.ToCamel(f.Name)))
+		scanFields = append(scanFields, "&obj."+strcase.ToCamel(f.Name))
 		updateAssignments = append(updateAssignments, fmt.Sprintf("%s=$%d", strcase.ToSnake(f.Name), i))
-		updateArgs = append(updateArgs, fmt.Sprintf("%s.%s", module, f.Name))
+		updateArgs = append(updateArgs, fmt.Sprintf("%s.%s", module, strcase.ToCamel(f.Name)))
 		i++
 	}
 
@@ -97,10 +98,10 @@ return err
 }
 `, pkgPath, module, module, module, module,
 		module, module, module, name, module,
-		module, insertFields, insertPlaceholders, insertArgs,
-		module, module, module, insertFields, module,
-		module, module, name, module, scanArgs,
-		module, module, module, name, module, insertFields, module, scanArgs,
-		module, module, module, name, module, module, updateSet, i, updateArgsStr,
-		module, module, module)
+		insertFields, insertPlaceholders, insertArgs,
+		module, module, name, insertFields, module,
+		module, name, module, name, scanArgs,
+		module, module, name, module, name, insertFields, module, scanArgs,
+		module, module, module, name, module, updateSet, i, updateArgsStr,
+		module, module)
 }

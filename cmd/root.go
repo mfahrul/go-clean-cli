@@ -7,7 +7,6 @@ import (
 	"crudgen/generator"
 	"crudgen/generator/templates"
 
-	"github.com/iancoleman/strcase"
 	"github.com/spf13/cobra"
 )
 
@@ -41,7 +40,7 @@ var rootCmd = &cobra.Command{
 			if typ == "" {
 				break
 			}
-			fields = append(fields, templates.Field{Name: name, Type: typ, Tag: strcase.ToSnake(name)})
+			fields = append(fields, templates.Field{Name: name, Type: typ})
 		}
 		generator.Generate(moduleName, projectModulePath, fields)
 	},
