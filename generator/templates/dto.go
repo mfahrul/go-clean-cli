@@ -22,6 +22,7 @@ func DTO(module string, fields []Field) string {
 	import "time"
 
 type CreateDTO struct {
+	Id string `+"`json:\"id\"`"+`
 	%s
 }
 
@@ -30,6 +31,7 @@ type UpdateDTO struct {
 }
 
 type ResponseDTO struct {
+	Id string `+"`json:\"id\"`"+`
 	%sCreatedAt *time.Time `+"`json:\"created_at,omitempty\"`"+`
 	UpdatedAt *time.Time `+"`json:\"updated_at,omitempty\"`"+`
 	DeletedAt *time.Time `+"`json:\"deleted_at,omitempty\"`"+`

@@ -18,6 +18,7 @@ func Entity(module string, fields []Field) string {
 import "time"
 
 type %s struct {
+	Id string `+"`json:\"id\"`"+`
 	%sCreatedAt *time.Time `+"`json:\"created_at,omitempty\"`"+`
 	UpdatedAt *time.Time `+"`json:\"updated_at,omitempty\"`"+`
 	DeletedAt *time.Time `+"`json:\"deleted_at,omitempty\"`"+`
