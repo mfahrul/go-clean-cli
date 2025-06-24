@@ -11,10 +11,10 @@ func Repository(module string, fields []Field) string {
 	return fmt.Sprintf(`package %s
 
 type Repository interface {
-	Create(%s *%s) error
-	FindAll() ([]%s, error)
-	FindByID(id string) (*%s, error)
-	Update(id string, %s *%s) error
-	Delete(id string) error
+Create(%s *%s) error
+FindAll(page, limit int, sort, order, search string) ([]%s, int64, error)
+FindByID(id string) (*%s, error)
+Update(id string, %s *%s) error
+Delete(id string) error
 }`, module, module, name, name, name, module, name)
 }
