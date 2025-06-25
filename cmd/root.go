@@ -20,6 +20,11 @@ var rootCmd = &cobra.Command{
 			fmt.Println("❌ Module name is required. Use -m flag.")
 			os.Exit(1)
 		}
+		_, err := os.ReadDir("internal")
+		if err != nil {
+			fmt.Println("❌ Failed to read internal directory.", err)
+			os.Exit(1)
+		}
 		projectModulePath, err := generator.ReadModulePath()
 		if err != nil {
 			fmt.Println("❌ Failed to read go.mod:", err)
