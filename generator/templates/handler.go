@@ -49,13 +49,13 @@ func (h *Handler) buildPaginationURL(c *fiber.Ctx, page int) string {
         // Replace existing page parameter or add it
         if strings.Contains(query, "page=") {
             re := regexp.MustCompile("page=\\d+")
-            query = re.ReplaceAllString(query, fmt.Sprintf("page=%d", page))
+            query = re.ReplaceAllString(query, fmt.Sprintf("page=%%d", page))
         } else {
-            query = query + fmt.Sprintf("&page=%d", page)
+            query = query + fmt.Sprintf("&page=%%d", page)
         }
-        return fmt.Sprintf("%s%s?%s", baseURL, path, query)
+        return fmt.Sprintf("%%s%%s?%%s", baseURL, path, query)
     }
-    return fmt.Sprintf("%s%s?page=%d", baseURL, path, page)
+    return fmt.Sprintf("%%s%%s?page=%%d", baseURL, path, page)
 }
 
 func (h *Handler) Get%ss(c *fiber.Ctx) error {
@@ -128,5 +128,5 @@ func (h *Handler) Delete%s(c *fiber.Ctx) error {
     }
     return c.SendStatus(fiber.StatusNoContent)
 }`, pkgPath, module, module, module, name,
-		module, name, module, name, module, name)
+		module, name, module, name, name, module, name)
 }

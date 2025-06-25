@@ -70,9 +70,9 @@ func (r *%sRepo) FindAll(page, limit int, sort, order, search string) ([]%s.%s, 
         searchFields := []string{%s}
         searchConditions := make([]string, len(searchFields))
         for i, field := range searchFields {
-            searchConditions[i] = fmt.Sprintf("LOWER(%s::text) LIKE LOWER($1)", field)
+            searchConditions[i] = fmt.Sprintf("LOWER(%%s::text) LIKE LOWER($1)", field)
         }
-        baseQuery += fmt.Sprintf(" AND (%s)", strings.Join(searchConditions, " OR "))
+        baseQuery += fmt.Sprintf(" AND (%%s)", strings.Join(searchConditions, " OR "))
         args = append(args, "%%"+search+"%%")
     }
     
@@ -141,7 +141,7 @@ func (r *%sRepo) Delete(id string) error {
 		insertFields, insertPlaceholders, insertArgs,
 		module, module, name, module,
 		strings.Join(fieldNames, ", "),
-		insertFields, module, module, name, module, name, scanArgs,
+		insertFields, module, name, module, name, scanArgs,
 		module, module, name, module, name, insertFields, module, scanArgs,
 		module, module, module, name, module, updateSet, i, updateArgsStr,
 		module, module)

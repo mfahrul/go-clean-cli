@@ -34,22 +34,22 @@ import (
     "%s/internal/%s"
 )
 
-type %sUsecase struct {
+type %s_Usecase struct {
     repo %s.Repository
 }
 
 func New(repo %s.Repository) %s.Usecase {
-    return &%sUsecase{repo: repo}
+    return &%s_Usecase{repo: repo}
 }
 
-func (uc *%sUsecase) Create(dto %s.CreateDTO) error {
+func (uc *%s_Usecase) Create(dto %s.CreateDTO) error {
     obj := &%s.%s{
         %s
     }
     return uc.repo.Create(obj)
 }
 
-func (uc *%sUsecase) FindAll(query *%s.PaginationQuery) (*%s.PaginationResponse, error) {
+func (uc *%s_Usecase) FindAll(query *%s.PaginationQuery) (*%s.PaginationResponse, error) {
     // Set defaults if not provided
     if query.Page < 1 {
         query.Page = 1
@@ -118,7 +118,7 @@ func (uc *%sUsecase) FindAll(query *%s.PaginationQuery) (*%s.PaginationResponse,
     return response, nil
 }
 
-func (uc *%sUsecase) FindByID(id string) (*%s.ResponseDTO, error) {
+func (uc *%s_Usecase) FindByID(id string) (*%s.ResponseDTO, error) {
     obj, err := uc.repo.FindByID(id)
     if err != nil {
         return nil, err
@@ -129,7 +129,7 @@ func (uc *%sUsecase) FindByID(id string) (*%s.ResponseDTO, error) {
     return result, nil
 }
 
-func (uc *%sUsecase) Update(id string, dto %s.UpdateDTO) (*%s.ResponseDTO, error) {
+func (uc *%s_Usecase) Update(id string, dto %s.UpdateDTO) (*%s.ResponseDTO, error) {
     obj, err := uc.repo.FindByID(id)
     if err != nil {
         return nil, err
@@ -152,14 +152,14 @@ func (uc *%sUsecase) Update(id string, dto %s.UpdateDTO) (*%s.ResponseDTO, error
     return result, nil
 }
 
-func (uc *%sUsecase) Delete(id string) error {
+func (uc *%s_Usecase) Delete(id string) error {
     return uc.repo.Delete(id)
 }`, pkgPath, module, module, module, module,
 		module, module, module, module, module,
 		name, createAssignments,
 		module, module, module,
-		module, module, module, responseAssignments,
 		module, module, module, module, responseAssignments,
+		module, module, module, module, module, responseAssignments,
 		module, module, module, updateLogic,
 		module, responseAssignments,
 		module)
