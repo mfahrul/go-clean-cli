@@ -39,23 +39,27 @@ func (h *Handler) Create%s(c *fiber.Ctx) error {
 }
 
 func (h *Handler) buildPaginationURL(c *fiber.Ctx, page int) string {
-    if page == 0 {
-        return ""
-    }
-    baseURL := c.BaseURL()
-    path := c.Path()
-    query := c.QueryString()
-    if query != "" {
-        // Replace existing page parameter or add it
-        if strings.Contains(query, "page=") {
-            re := regexp.MustCompile("page=\\d+")
-            query = re.ReplaceAllString(query, fmt.Sprintf("page=%%d", page))
-        } else {
-            query = query + fmt.Sprintf("&page=%%d", page)
-        }
-        return fmt.Sprintf("%%s%%s?%%s", baseURL, path, query)
-    }
-    return fmt.Sprintf("%%s%%s?page=%%d", baseURL, path, page)
+	if page == 0 {
+		return ""
+	}
+	baseURL := c.BaseURL()
+	path := c.Path()
+	queries := c.Queries()
+	var queryParts []string
+	for key, value := range queries {
+		if key == "page" {
+			// Skip the old page parameter as we'll add the new one
+			continue
+		}
+		queryParts = append(queryParts, fmt.Sprintf("%%s=%%s", key, value))
+	}
+	// Add the new page parameter
+	queryParts = append(queryParts, fmt.Sprintf("page=%%d", page))
+	query := strings.Join(queryParts, "&")
+	if len(queryParts) > 0 {
+		return fmt.Sprintf("%%s%%s?%%s", baseURL, path, query)
+	}
+	return fmt.Sprintf("%%s%%s?page=%%d", baseURL, path, page)
 }
 
 func (h *Handler) Get%ss(c *fiber.Ctx) error {
